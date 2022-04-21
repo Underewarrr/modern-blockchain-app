@@ -38,20 +38,21 @@ contract Transactions {
             keyword
             ));
 
-            emit Transfer(
+            emit Transfer(   
             msg.sender, 
             receiver, 
             amount, 
             message, 
             block.timestamp,
-            keyword);
+            keyword);  // emit event
+
     }
     function getAllTransactions() public view returns (TransferStruct[] memory) {   // returns all transactions
-        // return transactions;  
+         return transactions;  
     }
 
     function getTransactionCount() public view returns (uint256) {
-        // return transactionsCounter;
+         return transactionsCount;
     }
 
 }
