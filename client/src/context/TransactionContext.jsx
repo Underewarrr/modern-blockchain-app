@@ -22,13 +22,29 @@ const getEthereumContract = () => {  // get the ethereum contract instance
 
 
 export const TransactionProvider = ({ children }) => {  // provider component
-    const [connectedAccount, setConnectedAccount] = useState('');  // create a state
+    const [currentAccount, setCurrentAccount] = useState('');  // create a state
+    
+    
     const CheckIfWalletIsConnected = async () => {  // check if the user has connected their wallet
+        try {
         if (!ethereum) return alert("Please Install MetaMask")
         const accounts = await ethereum.request({method: 'eth_accounts'});  // get the accounts
-        console.log(accounts);
-    }
+       
+        if (accounts.length) {  
+            setCurrentAccount(accounts[0]);  // set the current account
 
+            // getAllTransactions();  // get all the transactions
+       
+        console.log(accounts);
+    } else{
+        console.log('No accounts found')
+    }
+        } catch (error) {
+            console.log(error);
+
+            throw new Error("No ETH Object");
+        }
+    }
     const connectWallet = async () => {  // connect the user's wallet
         try {
             if (!ethereum) return alert("Please Install MetaMask")  // check if the user has installed metamask
@@ -40,6 +56,7 @@ export const TransactionProvider = ({ children }) => {  // provider component
             throw new Error("No ETH Object");
         }
     }
+
 
     useEffect(() => {  // check if the user has connected their wallet
         CheckIfWalletIsConnected();  // check if the user has connected their wallet

@@ -20,7 +20,7 @@ const Input = ( {placeholder, name, type, value, handleChange} ) => (   // this 
 );
 
 const Welcome = () => {
-    const { connectWallet } = useContext(TransactionContext);
+    const { connectWallet, currentAccount } = useContext(TransactionContext);
    
     console.log(connectWallet)
 
@@ -37,11 +37,13 @@ const Welcome = () => {
                 <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                     Explorer the crypto world with the world's most popular crypto exchange. Easily on Krypt.
                 </p>
+
                 <button
                 type="button"
                 onClick={ connectWallet }
                 className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 roundedd-full cursor-pointer hover:bg-[#2546bd]"
                 >
+                    
                 <p className="text-white text-base font-semibold">Connect Wallet</p>
                 </button>
                 <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
