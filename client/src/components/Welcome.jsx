@@ -20,7 +20,7 @@ const Input = ( {placeholder, name, type, value, handleChange} ) => (   // this 
 );
 
 const Welcome = () => {
-    const { connectWallet, currentAccount } = useContext(TransactionContext);
+    const { connectWallet, currentAccount} = useContext(TransactionContext);
    
     console.log(connectWallet)
 
@@ -37,15 +37,15 @@ const Welcome = () => {
                 <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
                     Explorer the crypto world with the world's most popular crypto exchange. Easily on Krypt.
                 </p>
-                {currentAccount && (
+                {!currentAccount && (
                     <button
                     type="button"
                     onClick={ connectWallet }
                     className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 roundedd-full cursor-pointer hover:bg-[#2546bd]"
                     >
-                <p className="text-white text-base font-semibold">Connect Wallet</p>
-                </button>
-                )} 
+                    <p className="text-white text-base font-semibold">Connect Wallet</p>
+                    </button>
+                )}
                 <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                     <div className={`rounded-tl-2xl ${ companyCommonStyles }`}>  {/* this is a custom class that is used to create a border between the navbar items */}
                         Reliability
@@ -112,7 +112,7 @@ const Welcome = () => {
                      <div 
                      className="h-[1px] w-full bg-gray-400 my-2"
                      />
-                     {true ? (  
+                     {false ? (  
                         <Loader />  
                      ) : (
                          <button
