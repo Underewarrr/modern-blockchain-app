@@ -20,13 +20,9 @@ const Input = ( {placeholder, name, type, value, handleChange} ) => (   // this 
 );
 
 const Welcome = () => {
-    const { value } = useContext(TransactionContext);
+    const { connectWallet } = useContext(TransactionContext);
    
-    console.log(value)
-
-    const connectWallet = () => {
-
-    }
+    console.log(connectWallet)
 
     const handleSubmit = () => {
 
@@ -119,7 +115,7 @@ const Welcome = () => {
                      ) : (
                          <button
                          type="button"
-                         onClick={ handleSubmit }
+                         onClick={ connectWallet }
                          className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] rounded-full cursor-pointer hover:bg-[#3d4f7c] bg-transparent"
                          >
                         Send Now         
