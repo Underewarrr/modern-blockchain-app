@@ -12,7 +12,6 @@ const getEthereumContract = () => {  // get the ethereum contract instance
     const provider = new ethers.providers.Web3Provider(ethereum);  // create a provider
     const signer = provider.getSigner();  // get the signer
     const transactionContract = new ethers.Contract(contractAddress, contractABI, signer);  // create a contract instance
-
    return transactionContract;
 }
 
@@ -64,7 +63,7 @@ export const TransactionProvider = ({ children }) => {  // provider component
         const { adressTo, amount, keyword, message } = formData;  
 
         const transactionContract = getEthereumContract();  // get the ethereum contract instance
-        //const parsedAmount = ethers.utils.parseEther(amount);  // parse the amount
+        const parsedAmount = ethers.utils.parseEther(amount);  // parse the amount
             
         await ethereum.request({  // send the transaction
             method: 'eth_sendTransaction',
