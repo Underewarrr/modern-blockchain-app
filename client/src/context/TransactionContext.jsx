@@ -22,8 +22,21 @@ const getEthereumContract = () => {  // get the ethereum contract instance
 
 
 export const TransactionProvider = ({ children }) => {  // provider component
+
+    const CheckIfWalletIsConnected = async () => {  // check if the user has connected their wallet
+        if (!ethereum) return alert("Please Install MetaMask")
+
+        const accounts = await ethereum.request({method: 'eth_accounts'});
+
+        console.log(accounts);
+    }
+
+    useEffect(() => {  // check if the user has connected their wallet
+        CheckIfWalletIsConnected();
+    }, []);
+    
     return (  
-        <TransactionContext.Provider value={children}> 
+        <TransactionContext.Provider value={{value: 'teste'}}> 
          { children}  // pass the children to the provider
         </TransactionContext.Provider>
     )
