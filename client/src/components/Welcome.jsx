@@ -1,7 +1,10 @@
+import React, { useContext } from 'react';
 import { AiFillPayCircle  } from "react-icons/ai";  // this is a custom icon
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";  // this is a custom icon
+import { TransactionContext } from "../context/TransactionContext";
 import { Loader } from './';
+
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";  // this is a custom class that is used to create a border between the navbar items
 
@@ -17,14 +20,17 @@ const Input = ( {placeholder, name, type, value, handleChange} ) => (   // this 
 );
 
 const Welcome = () => {
+    const { value } = useContext(TransactionContext);
+   
+    console.log(value)
 
-const connectWallet = () => {
+    const connectWallet = () => {
 
-}
+    }
 
-const handleSubmit = () => {
+    const handleSubmit = () => {
 
-}
+    }
     return (
     <div className="flex w-full justify-center items-center">  {/* this is a custom class that is used to create a border between the navbar items */}
         <div className="flex mf:flex-row flex-col items-start justify-between md:p-50 py-12 px-4">  {/* this is a custom class that is used to create a border between the navbar items */}
