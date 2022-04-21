@@ -20,13 +20,16 @@ const Input = ( {placeholder, name, type, value, handleChange} ) => (   // this 
 );
 
 const Welcome = () => {
-    const { connectWallet, currentAccount} = useContext(TransactionContext);
-   
-    console.log(connectWallet)
+    const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
-    const handleSubmit = () => {
-
-    }
+    const handleSubmit = (e) => {
+      const { addressTo, amount, keyword, message } = formData;
+  
+      e.preventDefault();   
+  
+      if (addressTo || amount || keyword || message) return;
+      sendTransaction();
+    };
     return (
     <div className="flex w-full justify-center items-center">  {/* this is a custom class that is used to create a border between the navbar items */}
         <div className="flex mf:flex-row flex-col items-start justify-between md:p-50 py-12 px-4">  {/* this is a custom class that is used to create a border between the navbar items */}
@@ -88,25 +91,25 @@ const Welcome = () => {
                     <Input 
                      placeholder="Address To"
                      name="addressTo"
-                     handleChange={ () => { } }
+                     handleChange={ () => { handleChange } }
                      type="text"
                      />
                       <Input 
                      placeholder="Amount (ETH)"
                      name="amount"
-                     handleChange={ () => { } }
+                     handleChange={ () => { handleChange } }
                      type="number"
                      />
                       <Input 
                      placeholder="Keyword (Gif)"
-                     name="Keyword"
-                     handleChange={ () => { } }
+                     name="keyword"
+                     handleChange={ () => { handleChange } }
                      type="text"
                      />
                       <Input 
                      placeholder="Enter Message"
                      name="message"
-                     handleChange={ () => { } }
+                     handleChange={ () => { handleChange } }
                      type="text"
                      />
                      <div 
@@ -117,7 +120,7 @@ const Welcome = () => {
                      ) : (
                          <button
                          type="button"
-                         onClick={ connectWallet }
+                         onClick={ handleSubmit }
                          className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] rounded-full cursor-pointer hover:bg-[#3d4f7c] bg-transparent"
                          >
                         Send Now         
