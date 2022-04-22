@@ -25,7 +25,9 @@ const TransactionCard = ({addressTo, addressFrom, timeStamp, message, keyword, a
             <a href={`https://ropsten.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">To: {shortenAddress(addressTo)}</p>
             </a>
-        </div>
+            <p className='text-white text-base'>Amount: {amount} ETH</p>
+         </div>
+
         </div>
       </div>
     );
