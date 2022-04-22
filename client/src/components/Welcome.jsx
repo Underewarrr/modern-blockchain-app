@@ -127,6 +127,12 @@ function Welcome() {
               type="number"
             />
             <Input
+              placeholder="Keyword (Gif)"
+              name="keyword"
+              handleChange={handleChange}
+              type="text"
+            />
+            <Input
               placeholder="Enter Message"
               name="message"
               handleChange={handleChange}
@@ -135,7 +141,7 @@ function Welcome() {
             <div
               className="h-[1px] w-full bg-gray-400 my-2"
             />
-            {false ? (
+            {isLoading ? (
               <Loader />
             ) : (
               <button
