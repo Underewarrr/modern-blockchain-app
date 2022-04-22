@@ -38,6 +38,7 @@ function Welcome() {
     // if user have a wallet connected with metamask then allow to send transaction
     sendTransaction();
   };
+
   return (
     <div className="flex w-full justify-center items-center">
       {' '}

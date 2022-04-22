@@ -15,8 +15,15 @@ const { ethereum } = window; // get the ethereum provider
 const getEthereumContract = () => { // get the ethereum contract instance
   const provider = new ethers.providers.Web3Provider(ethereum); // create a provider
   const signer = provider.getSigner(); // get the signer
-  const transactionContract = new ethers.Contract(contractAddress, contractABI, signer); // create a contract instance
-  return transactionContract;
+  const transactionContract = new
+  ethers.Contract(contractAddress, contractABI, signer); // create a contract instance
+
+  console.log({
+    provider,
+    signer,
+    transactionContract,
+  });
+  // return transactionContract;
 };
 
 export function TransactionProvider({ children }) { // provider component
@@ -67,9 +74,16 @@ export function TransactionProvider({ children }) { // provider component
   const sendTransaction = async () => {
     try {
       if (!ethereum) return alert('Please Install MetaMask'); // check if the user has installed metamask
-      // get the data from the form
+
+      // get the data from the Context
+      const {
+        addressTo, amount, keyword, message,
+      } = formData;
+      // get the contract instance
+      getEthereumContract();
     } catch (error) {
       console.log(error);
+
       throw new Error('No ETH Object');
     }
   };
@@ -80,8 +94,10 @@ export function TransactionProvider({ children }) { // provider component
 
   return (
     <TransactionContext.Provider
+      // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
-        connectWallet, currentAccount, formData, setFormData, handleChange}}
+        connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction,
+      }}
     >
       { children }
     </TransactionContext.Provider>
