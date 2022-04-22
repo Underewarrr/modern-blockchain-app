@@ -127,12 +127,6 @@ function Welcome() {
               type="number"
             />
             <Input
-              placeholder="Keyword (Gif)"
-              name="keyword"
-              handleChange={handleChange}
-              type="text"
-            />
-            <Input
               placeholder="Enter Message"
               name="message"
               handleChange={handleChange}
