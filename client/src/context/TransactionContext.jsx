@@ -13,7 +13,7 @@ const { ethereum } = window; // get the ethereum provider
 
 // fetch ETH contract instance
 
-const getEthereumContract = () => { // get the ethereum contract instance
+const createEthereumContract = () => { // get the ethereum contract instance
   const provider = new ethers.providers.Web3Provider(ethereum); // create a provider
   const signer = provider.getSigner(); // get the signer
   const transactionContract = new
@@ -69,47 +69,44 @@ export function TransactionProvider({ children }) { // provider component
 
   const sendTransaction = async () => {
     try {
-      if (!ethereum) return alert('Please Install MetaMask'); // check if the user has installed metamask
+      if (ethereum) {
+        const {
+          addressTo, amount, keyword, message,
+        } = formData;
+        const transactionsContract = createEthereumContract();
+        const parsedAmount = ethers.utils.parseEther(amount);
 
-      // get the data from the Context
-      const {
-        addressTo, amount, keyword, message,
-      } = formData;
-      const transactionContract = getEthereumContract(); // get the contract instance
+        await ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [{
+            from: currentAccount,
+            to: addressTo,
+            gas: '0x5208',
+            // eslint-disable-next-line no-underscore-dangle
+            value: parsedAmount._hex,
+          }],
+        });
 
-      const parsedAmount = ethers.utils.parseEther(amount); // parse the amount
-      await ethereum.request({
-        method: 'eth_sendTransaction',
-        params: [{
-          from: currentAccount,
-          to: addressTo,
-          gas: '0x5208', // 21000 GWEI
-          value: parsedAmount, // 0.00001 ETH converted to Hexadecimal Number
-        }],
-      }); // get the user's accounts
+        // eslint-disable-next-line max-len
+        const transactionHash = await transactionsContract.addToBlockchain(addressTo, parsedAmount, message, keyword);
 
-      const transactionHash = await transactionContract
-        .addToBlockchain(
-          addressTo,
-          parsedAmount,
-          message,
-          keyword,
-        ); // add the transaction to the blockchain
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
 
-      setIsLoading(true); // set the loading state to true
-      console.log(`Loading - ${transactionHash.hash}`); // log the transaction hash
-      await transactionHash.wait(); // wait for the transaction to be mined
-      setIsLoading(false); // set the loading state to false
-      console.log(`Sucess - ${transactionHash.hash}`); // log the transaction hash
+        const transactionsCount = await transactionsContract.getTransactionCount();
 
-      // eslint-disable-next-line max-len
-      const transactionCount = await transactionContract.getTransactionCount(); // get the transaction count
-
-      setTransactionCount(transactionCount.toNumber()); // set the transaction count with toNumber()
+        setTransactionCount(transactionsCount.toNumber());
+        window.location.reload();
+      } else {
+        console.log('No ethereum object');
+      }
     } catch (error) {
       console.log(error);
 
-      throw new Error('No ETH Object');
+      throw new Error('No ethereum object');
     }
   };
 
@@ -121,7 +118,13 @@ export function TransactionProvider({ children }) { // provider component
     <TransactionContext.Provider
       // eslint-disable-next-line react/jsx-no-constructed-context-values
       value={{
-        connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction,
+        transactionCount,
+        connectWallet,
+        currentAccount,
+        isLoading,
+        sendTransaction,
+        handleChange,
+        formData,
       }}
     >
       { children }
