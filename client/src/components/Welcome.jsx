@@ -31,10 +31,11 @@ function Welcome() {
     const {
       addressTo, amount, keyword, message,
     } = formData;
-
+    // usualy when submit a form page reload, but in this case we don't want to reload the page
     e.preventDefault();
-
-    if (addressTo || amount || keyword || message) return;
+    // if user donot have a wallet connected with metamask then donot allow to send transaction
+    if (!addressTo || !amount || !keyword || !message) return;
+    // if user have a wallet connected with metamask then allow to send transaction
     sendTransaction();
   };
   return (
