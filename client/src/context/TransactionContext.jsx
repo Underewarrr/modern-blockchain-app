@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-console */
 /* eslint-disable no-alert */
 /* eslint-disable react/prop-types */
@@ -18,12 +19,7 @@ const getEthereumContract = () => { // get the ethereum contract instance
   const transactionContract = new
   ethers.Contract(contractAddress, contractABI, signer); // create a contract instance
 
-  console.log({
-    provider,
-    signer,
-    transactionContract,
-  });
-  // return transactionContract;
+  return transactionContract;
 };
 
 export function TransactionProvider({ children }) { // provider component
@@ -34,7 +30,7 @@ export function TransactionProvider({ children }) { // provider component
   }); // create a state
 
   const [isLoading, setIsLoading] = useState(false); // create a state
-  const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount')); // create a state
+  const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount')); // create a state get from local storage transaction count
 
   const handleChange = (e, name) => {
     setFormData((prevState) => ({
@@ -79,8 +75,37 @@ export function TransactionProvider({ children }) { // provider component
       const {
         addressTo, amount, keyword, message,
       } = formData;
-      // get the contract instance
-      getEthereumContract();
+      const transactionContract = getEthereumContract(); // get the contract instance
+
+      const parsedAmount = ethers.utils.parseEther(amount); // parse the amount
+      await ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: currentAccount,
+          to: addressTo,
+          gas: '0x5208', // 21000 GWEI
+          value: parsedAmount, // 0.00001 ETH converted to Hexadecimal Number
+        }],
+      }); // get the user's accounts
+
+      const transactionHash = await transactionContract
+        .addToBlockchain(
+          addressTo,
+          parsedAmount,
+          message,
+          keyword,
+        ); // add the transaction to the blockchain
+
+      setIsLoading(true); // set the loading state to true
+      console.log(`Loading - ${transactionHash.hash}`); // log the transaction hash
+      await transactionHash.wait(); // wait for the transaction to be mined
+      setIsLoading(false); // set the loading state to false
+      console.log(`Sucess - ${transactionHash.hash}`); // log the transaction hash
+
+      // eslint-disable-next-line max-len
+      const transactionCount = await transactionContract.getTransactionCount(); // get the transaction count
+
+      setTransactionCount(transactionCount.toNumber()); // set the transaction count with toNumber()
     } catch (error) {
       console.log(error);
 
