@@ -68,6 +68,7 @@ function Welcome() {
               <p className="text-white text-base font-semibold">Connect Wallet</p>
             </button>
           )}
+
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
             <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
               {/* this is a custom class that is used to create a border between the navbar item */}
@@ -112,25 +113,25 @@ function Welcome() {
             <Input
               placeholder="Address To"
               name="addressTo"
-              handleChange={() => { handleChange; }}
+              handleChange={handleChange}
               type="text"
             />
             <Input
               placeholder="Amount (ETH)"
               name="amount"
-              handleChange={() => { handleChange; }}
+              handleChange={handleChange}
               type="number"
             />
             <Input
               placeholder="Keyword (Gif)"
               name="keyword"
-              handleChange={() => { handleChange; }}
+              handleChange={handleChange}
               type="text"
             />
             <Input
               placeholder="Enter Message"
               name="message"
-              handleChange={() => { handleChange; }}
+              handleChange={handleChange}
               type="text"
             />
             <div
