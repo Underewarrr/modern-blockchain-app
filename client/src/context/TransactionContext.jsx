@@ -31,6 +31,7 @@ export function TransactionProvider({ children }) { // provider component
 
   const [isLoading, setIsLoading] = useState(false); // create a state
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount')); // create a state get from local storage transaction count
+  const [transactions, setTransactions] = useState([]); // create a state get from local storage transaction count
 
   const handleChange = (e, name) => {
     setFormData((prevState) => ({
@@ -38,18 +39,57 @@ export function TransactionProvider({ children }) { // provider component
     }));
   };
 
+  const getAllTransactions = async () => {
+    try {
+      if (ethereum) {
+        const transactionsContract = createEthereumContract();
+
+        const availableTransactions = await transactionsContract.getAllTransactions();
+
+        const structuredTransactions = availableTransactions.map((transaction) => ({
+          addressTo: transaction.receiver,
+          addressFrom: transaction.sender,
+          timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+          message: transaction.message,
+          keyword: transaction.keyword,
+          amount: parseInt(transaction.amount._hex) / (10 ** 18)
+        }));
+
+        console.log(structuredTransactions);
+
+        setTransactions(structuredTransactions);
+      } else {
+        console.log("Ethereum is not present");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
   async function CheckIfWalletIsConnected() {
     try {
       if (!ethereum) { return alert('Please Install MetaMask'); }
       const accounts = await ethereum.request({ method: 'eth_accounts' }); // get the accounts
       if (accounts.length) {
         setCurrentAccount(accounts[0]); // set the current account
-
-        // getAllTransactions();  // get all the transactions
+        getAllTransactions();  // get all the transactions
         console.log(accounts);
       } else {
         console.log('No accounts found');
       }
+    } catch (error) {
+      console.log(error);
+      throw new Error('No ETH Object');
+    }
+  }
+
+  const checkIfTransactionsExist = async () => {
+    try {
+      const transactionsContract = createEthereumContract();  // get the contract instance
+      const transactionsCount = await transactionsContract.getTransactionCount();  // get the transaction count
+      window.localStorage.setItem('transactionCount', transactionsCount);  // set the transaction count in local storage
     } catch (error) {
       console.log(error);
       throw new Error('No ETH Object');
@@ -67,13 +107,13 @@ export function TransactionProvider({ children }) { // provider component
     }
   };
 
-  const sendTransaction = async () => {
+  const sendTransaction = async () => {  // send the transaction
     try {
       if (ethereum) {
         const {
           addressTo, amount, keyword, message,
         } = formData;
-        const transactionsContract = createEthereumContract();
+        const transactionsContract = createEthereumContract();  // get the contract instance
         const parsedAmount = ethers.utils.parseEther(amount);
 
         await ethereum.request({
@@ -96,7 +136,7 @@ export function TransactionProvider({ children }) { // provider component
         console.log(`Success - ${transactionHash.hash}`);
         setIsLoading(false);
 
-        const transactionsCount = await transactionsContract.getTransactionCount();
+        const transactionsCount = await transactionsContract.getTransactionCount();  // get the transaction count
 
         setTransactionCount(transactionsCount.toNumber());
         window.location.reload();
@@ -112,6 +152,7 @@ export function TransactionProvider({ children }) { // provider component
 
   useEffect(() => { // check if the user has connected their wallet
     CheckIfWalletIsConnected(); // check if the user has connected their wallet
+    checkIfTransactionsExist(); // check if the transactions exist
   }, []);
 
   return (
@@ -125,6 +166,7 @@ export function TransactionProvider({ children }) { // provider component
         sendTransaction,
         handleChange,
         formData,
+        transactions,
       }}
     >
       { children }

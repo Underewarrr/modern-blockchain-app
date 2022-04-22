@@ -39,13 +39,13 @@ const Services = () => {
          color="bg-[#89845F8]"
          tittle="Best  exchange rates available"
          icon={<BsInfoCircle fontSize={21} className="text-white"/> }
-         subTittle="You can pay less in exchanges using our website. Enjoyt it"
+         subTittle="You can pay less exchanges using our website. You are safe here."
         />
          <ServiceCard 
          color="bg-[#F84550]"
          tittle="Fatest Trasactions"
          icon={<MdOutlineMilitaryTech fontSize={21} className="text-white"/> }
-         subTittle="We use the most advanced WebTech to build this website."
+         subTittle="We use the best technology to build this website. We are the best."
         />
     </div>
 
