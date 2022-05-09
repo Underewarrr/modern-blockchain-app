@@ -2,6 +2,4 @@
 Using **React and Tailwind**, stunning design, connected to blockchain, metamask pairing, interacting with smart contracts, sending Ethereum over blockchain network.
 
 
-Visit [App](https://modern-block-chain.000webhostapp.com/)
-
 
